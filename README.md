@@ -1,6 +1,6 @@
 # SecureStorage plugin for Apache Cordova
 
-[![NPM](https://nodei.co/npm/cordova-plugin-secure-storage-android10.png?mini=true)](https://nodei.co/npm/cordova-plugin-secure-storage-android10/)
+[![NPM](https://nodei.co/npm/cordova-plugin-secure-storage-android10-reupload.png?mini=true)](https://nodei.co/npm/cordova-plugin-secure-storage-android10-reupload/)
 
 ##### This is a fork [mibrito707/cordova-plugin-secure-storage-echo](https://github.com/mibrito707/cordova-plugin-secure-storage-echo) of a fork [Crypho/cordova-plugin-secure-storage](https://github.com/Crypho/cordova-plugin-secure-storage) and uses the encryption cipher method of the original branch (GCC), this way it's possible to migrate/update to this package without losing data.
 
@@ -35,7 +35,7 @@ The plugin can be installed via the Cordova command line interface:
 - Run the command:
 
 ```sh
-cordova plugin add cordova-plugin-secure-storage-android10
+cordova plugin add cordova-plugin-secure-storage-android10-reupload
 ```
 
 ## <a name="plugin_api"></a> Plugin API

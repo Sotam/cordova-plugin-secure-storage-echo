@@ -1,6 +1,6 @@
 {
   "name": "cordova-plugin-secure-storage-android10-reupload",
-  "version": "6.0.2",
+  "version": "6.0.2.1",
   "description": "Secure storage plugin for iOS & Android 10 (backwards compatible with Android 9)",
   "author": "Yiorgis Gozadinos <ggozad@crypho.com>",
   "contributors": [
