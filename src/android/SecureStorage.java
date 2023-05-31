@@ -21,7 +21,6 @@ import org.json.JSONObject;
 
 import java.lang.reflect.Method;
 import java.util.Hashtable;
-import java.util.Map;
 import java.util.concurrent.Executor;
 
 public class SecureStorage extends CordovaPlugin {
@@ -133,16 +132,16 @@ public class SecureStorage extends CordovaPlugin {
             final String service = args.getString(0);
             final String key = args.getString(1);
             final String value = args.getString(2);
-            final String cypherMode = args.getString(3);
+            final String cipherMode = args.isNull(3) ? null : args.getString(3); // Close #6 - cipherMode is optional
             final String adata = service;
             cordova.getThreadPool().execute(new Runnable() {
                 public void run() {
                     try {
-                        JSONObject result = AES.encrypt(value.getBytes(), adata.getBytes(), cypherMode);
+                        JSONObject result = AES.encrypt(value.getBytes(), adata.getBytes(), cipherMode);
                         byte[] aes_key = Base64.decode(result.getString("key"), Base64.DEFAULT);
                         byte[] aes_key_enc = rsa.encrypt(aes_key, service2alias(service));
                         result.put("key", Base64.encodeToString(aes_key_enc, Base64.DEFAULT));
-                        if (cypherMode != null) result.put("mode", cypherMode);
+                        if (cipherMode != null) result.put("mode", cipherMode);
                         getStorage(service).store(key, result.toString());
                         callbackContext.success(key);
                     } catch (Exception e) {
@@ -168,7 +167,8 @@ public class SecureStorage extends CordovaPlugin {
                     public void run() {
                         try {
                             byte[] decryptedKey = rsa.decrypt(encKey, service2alias(service));
-                            String decrypted = new String(AES.decrypt(ct, decryptedKey, iv, adata, data.getString("mode")));
+                            String cypherMode = data.isNull("mode") ? null : data.getString("mode");
+                            String decrypted = new String(AES.decrypt(ct, decryptedKey, iv, adata, cypherMode));
                             callbackContext.success(decrypted);
                         } catch (Exception e) {
                             Log.e(TAG, "Decrypt failed :", e);
