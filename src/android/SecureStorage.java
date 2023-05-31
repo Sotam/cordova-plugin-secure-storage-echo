@@ -21,7 +21,6 @@ import org.json.JSONObject;
 
 import java.lang.reflect.Method;
 import java.util.Hashtable;
-import java.util.Map;
 import java.util.concurrent.Executor;
 
 public class SecureStorage extends CordovaPlugin {
@@ -133,7 +132,7 @@ public class SecureStorage extends CordovaPlugin {
             final String service = args.getString(0);
             final String key = args.getString(1);
             final String value = args.getString(2);
-            final String cipherMode = args.getString(3);
+            final String cipherMode = args.isNull(3) ? null : args.getString(3); // Close #6 - cipherMode is optional
             final String adata = service;
             cordova.getThreadPool().execute(new Runnable() {
                 public void run() {
@@ -168,7 +167,8 @@ public class SecureStorage extends CordovaPlugin {
                     public void run() {
                         try {
                             byte[] decryptedKey = rsa.decrypt(encKey, service2alias(service));
-                            String decrypted = new String(AES.decrypt(ct, decryptedKey, iv, adata, data.getString("mode")));
+                            String cipherMode = data.isNull("mode") ? null : data.getString("mode");
+                            String decrypted = new String(AES.decrypt(ct, decryptedKey, iv, adata, cipherMode));
                             callbackContext.success(decrypted);
                         } catch (Exception e) {
                             Log.e(TAG, "Decrypt failed :", e);
